@@ -31,8 +31,6 @@ class Solution
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
     {
-        double result_odd = 0.0;
-        double result_even = 0.0;
         int total_length = nums1.size() + nums2.size();
         if (total_length == 0)
         {
@@ -45,56 +43,35 @@ public:
 
         detail(iter_1, nums1.cend(), iter_2, nums2.cend(), total_consume);
 
-        if (iter_1 == nums1.cend())
+        vector<int> vec;
+        while ((iter_1 != nums1.cend() || iter_2 != nums2.cend()) && vec.size() <= 2)
         {
-            result_odd = *iter_2;
-            if (total_length % 2 == 0)
+            if (iter_1 == nums1.cend())
             {
-                result_even = (result_odd + *(iter_2 + 1)) / 2.0;
+                vec.push_back(*iter_2++);
             }
-        }
-        else if (iter_2 == nums2.cend())
-        {
-            result_odd = *iter_1;
-            if (total_length % 2 == 0)
+            else if (iter_2 == nums2.cend())
             {
-                result_even = (result_odd + *(iter_1 + 1)) / 2.0;
+                vec.push_back(*iter_1++);
             }
-        }
-        else
-        {
-            vector<int> vec;
-            while ((iter_1 != nums1.cend() || iter_2 != nums2.cend()) && vec.size() <= 2)
+            else
             {
-                if (iter_1 == nums1.cend())
-                {
-                    vec.push_back(*iter_2++);
-                }
-                else if (iter_2 == nums2.cend())
+                if (*iter_1 < *iter_2)
                 {
                     vec.push_back(*iter_1++);
                 }
                 else
                 {
-                    if (*iter_1 < *iter_2)
-                    {
-                        vec.push_back(*iter_1++);
-                    }
-                    else
-                    {
-                        vec.push_back(*iter_2++);
-                    }
+                    vec.push_back(*iter_2++);
                 }
             }
-
-            result_odd = vec[0];
-            if (total_length % 2 == 0)
-            {
-                result_even = (result_odd + vec[1]) / 2.0;
-
-            }
         }
-        return total_length % 2 == 0 ? result_even : result_odd;
+
+        if (total_length % 2 == 0)
+        {
+            return (vec[0] + vec[1]) / 2.0;
+        }
+        return vec[0];
     }
 
     void detail(vector<int>::const_iterator &start_1, vector<int>::const_iterator end_1,
@@ -175,14 +152,14 @@ public:
     }
 };
 
-
 int main(int argc, char** argv)
 {
     vector<int> nums1
-    {4};
+    { 4 };
 
     // vector<int> nums2 { 16, 19, 55, 79, 80, 81, 82};
-    vector<int> nums2 {1, 3, 4};
+    vector<int> nums2
+    { 1, 3, 4 };
 
     cout << "median number is " << Solution().findMedianSortedArrays(nums1, nums2) << endl;
 

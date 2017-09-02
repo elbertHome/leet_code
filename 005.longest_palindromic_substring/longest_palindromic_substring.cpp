@@ -29,9 +29,46 @@ class Solution
 public:
     string longestPalindrome(string s)
     {
-        string result;
+        string max_sub = "";
 
-        return result;
+        auto head = s.cbegin();
+        auto tail = s.crbegin();
+        auto p_h = head;
+        auto p_t = tail;
+
+        while (head < s.cend())
+        {
+            p_h = head;
+            tail = s.crbegin();
+            while (tail.base() - p_h  > int(max_sub.size()))
+            {
+                if (*p_h == *tail)
+                {
+                    p_t = tail;
+                    while (p_h <= p_t.base() && *p_h == *p_t)
+                    {
+                        ++p_h;
+                        ++p_t;
+                    }
+
+                    if (p_h > p_t.base())
+                    {
+                        if (tail.base() - head  > int(max_sub.size()))
+                        {
+                            max_sub = string(head, tail.base());
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        p_h = head;
+                    }
+                }
+                ++tail;
+            }
+            ++head;
+        }
+        return max_sub;
     }
 };
 

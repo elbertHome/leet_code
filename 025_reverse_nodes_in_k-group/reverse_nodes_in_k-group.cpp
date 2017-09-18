@@ -50,28 +50,22 @@ public:
     {
         if (k <= 1 || *head == NULL)
             return;
-        else if (k == 2)
-        {
-            ListNode *p = *head;
-            ListNode *q = (*head)->next;
-            p->next = q->next;
-            q->next = p;
-            *head = q;
-        }
         else
         {
             ListNode *p = *head;
-            for (int i = 0; i < k / 2; ++i, p = p->next);
+            for (int i = 0; i < k / 2 && p != NULL; ++i, p = p->next);
+
+            if (p == NULL) return;
+
             ListNode *tail_1 = (*head);
             ListNode *tail_2 = p;
             ListNode **sub_head = &p;
-            detail(head, k/2);
-            detail(sub_head, k - k/2);
+            detail(head, k / 2);
+            detail(sub_head, k - k / 2);
             tail_1->next = tail_2->next;
             tail_2->next = *head;
-            head = sub_head;
+            *head = *sub_head;
         }
-
     }
 };
 

@@ -42,7 +42,12 @@ class Solution
 public:
     ListNode *reverseKGroup(ListNode *head, int k)
     {
-        detail(&head, k);
+        if (k > 1 && head != NULL)
+        {
+            ListNode *p = head;
+            detail(&head, k);
+            p->next = reverseKGroup(p->next, k);
+        }
         return head;
     }
 
@@ -53,9 +58,18 @@ public:
         else
         {
             ListNode *p = *head;
-            for (int i = 0; i < k / 2 && p != NULL; ++i, p = p->next);
+            ListNode *q = *head;
+            int i;
+            for (i = 0; i < k && q != NULL; ++i, q = q->next)
+            {
+                if (i == k / 2)
+                {
+                    p = q;
+                }
+            }
 
-            if (p == NULL) return;
+            if (i != k)
+                return;
 
             ListNode *tail_1 = (*head);
             ListNode *tail_2 = p;
